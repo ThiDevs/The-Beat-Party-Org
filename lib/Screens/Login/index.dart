@@ -82,186 +82,200 @@ class LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     timeDilation = 0.4;
     SystemChrome.setEnabledSystemUIOverlays([]);
-    return (new WillPopScope(
-        onWillPop: _onWillPop,
-        child: new Scaffold(
-            body: new Container(
-          decoration: new BoxDecoration(
-            image: backgroundImage,
-            gradient: new LinearGradient(
-              colors: <Color>[
-                const Color.fromRGBO(162, 146, 199, 0.8),
-                const Color.fromRGBO(0, 0, 0, 0),
-              ],
-              stops: [0.2, 1.0],
-              begin: const FractionalOffset(0.0, 0.0),
-              end: const FractionalOffset(0.0, 1.0),
-            ),
-          ),
-          child: Stack(children: <Widget>[
-            new Container(
-              // width: 20,
-              // height: 20
-              decoration: new BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/backgroud.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              // child: SizedBox.expand(
-              //         child: FittedBox(
-              //           fit: BoxFit.cover,
-              //           child: SizedBox(
-              //             width: _controller.value.size?.width ?? 0,
-              //             height: _controller.value.size?.height ?? 0,
-              //             child: VideoPlayer(_controller),
-              //           ),
-              //         ),)
-            ),
-            new Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  gradient: LinearGradient(
-                      begin: FractionalOffset.topCenter,
-                      end: FractionalOffset.bottomCenter,
-                      colors: [
-                        Colors.black.withOpacity(1),
-                        Colors.black.withOpacity(0),
-                      ])),
-            ),
-            new Container(
-                child: new ListView(
-              padding: const EdgeInsets.all(0.0),
-              children: <Widget>[
-                new Stack(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  children: <Widget>[
-                    new Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.only(
-                              left: 20.0, right: 20.0, top: 50),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8.0),
-                              topRight: Radius.circular(8.0),
-                            ),
-                            child: Image.asset(
-                              'assets/logotipo.png',
-                              fit: BoxFit.fill,
-                              height: 150,
-                            ),
-                          ),
+    return MediaQuery(
+        data: new MediaQueryData(),
+        child: new MaterialApp(
+            home: (new WillPopScope(
+                onWillPop: _onWillPop,
+                child: new Scaffold(
+                    body: new Container(
+                  decoration: new BoxDecoration(
+                    image: backgroundImage,
+                    gradient: new LinearGradient(
+                      colors: <Color>[
+                        const Color.fromRGBO(162, 146, 199, 0.8),
+                        const Color.fromRGBO(0, 0, 0, 0),
+                      ],
+                      stops: [0.2, 1.0],
+                      begin: const FractionalOffset(0.0, 0.0),
+                      end: const FractionalOffset(0.0, 1.0),
+                    ),
+                  ),
+                  child: Stack(children: <Widget>[
+                    new Container(
+                      // width: 20,
+                      // height: 20
+                      decoration: new BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/backgroud.jpg"),
+                          fit: BoxFit.cover,
                         ),
-                        // new FormContainer(),
-                        Container(
-                          margin: new EdgeInsets.symmetric(horizontal: 20.0),
-                          child: new Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              new Form(
-                                  child: new Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  Container(
-                                    decoration: new BoxDecoration(
-                                      border: new Border(
-                                        bottom: new BorderSide(
-                                          width: 0.5,
-                                          color: Colors.white24,
-                                        ),
-                                      ),
+                      ),
+
+                      // child: SizedBox.expand(
+                      //         child: FittedBox(
+                      //           fit: BoxFit.cover,
+                      //           child: SizedBox(
+                      //             width: _controller.value.size?.width ?? 0,
+                      //             height: _controller.value.size?.height ?? 0,
+                      //             child: VideoPlayer(_controller),
+                      //           ),
+                      //         ),)
+                    ),
+                    new Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          gradient: LinearGradient(
+                              begin: FractionalOffset.topCenter,
+                              end: FractionalOffset.bottomCenter,
+                              colors: [
+                                Colors.black.withOpacity(1),
+                                Colors.black.withOpacity(0),
+                              ])),
+                    ),
+                    new Container(
+                        child: new ListView(
+                      padding: const EdgeInsets.all(0.0),
+                      children: <Widget>[
+                        new Stack(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          children: <Widget>[
+                            new Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      left: 20.0, right: 20.0, top: 50),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8.0),
+                                      topRight: Radius.circular(8.0),
                                     ),
-                                    child: new TextFormField(
-                                      controller: text,
-                                      obscureText: false,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                      decoration: new InputDecoration(
-                                        icon: new Icon(
-                                          Icons.person_outline,
-                                          color: Colors.white,
-                                        ),
-                                        border: InputBorder.none,
-                                        hintText: "Login",
-                                        hintStyle: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15.0),
-                                        contentPadding: const EdgeInsets.only(
-                                            top: 30.0,
-                                            right: 30.0,
-                                            bottom: 30.0,
-                                            left: 5.0),
-                                      ),
+                                    child: Image.asset(
+                                      'assets/logotipo.png',
+                                      fit: BoxFit.fill,
+                                      height: 150,
                                     ),
                                   ),
-                                  // new InputFieldArea(
-                                  //     hint: "Login",
-                                  //     obscure: false,
-                                  //     icon: Icons.person_outline,
-                                  //     text: text),
-                                  // new InputFieldArea(
-                                  //   hint: "Senha",
-                                  //   obscure: true,
-                                  //   icon: Icons.lock_outline,
-                                  // ),
-                                ],
-                              )),
-                            ],
-                          ),
-                        ),
-                        new SignUp()
-                      ],
-                    ),
-                    animationStatus == 0
-                        ? new Padding(
-                            padding: const EdgeInsets.only(bottom: 50.0),
-                            child: new InkWell(
-                                onTap: () async {
-                                  FirebaseFirestore firestore;
-                                  await Firebase.initializeApp();
-                                  firestore = FirebaseFirestore.instance;
-                                  firestore
-                                      .collection("Comissarios")
-                                      .get()
-                                      .then((QuerySnapshot querySnapshot) => {
-                                            querySnapshot.docs.forEach((doc) {
-                                              var a = doc['Logins'];
+                                ),
+                                // new FormContainer(),
+                                Container(
+                                  margin: new EdgeInsets.symmetric(
+                                      horizontal: 20.0),
+                                  child: new Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      new Form(
+                                          child: new Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: new BoxDecoration(
+                                              border: new Border(
+                                                bottom: new BorderSide(
+                                                  width: 0.5,
+                                                  color: Colors.white24,
+                                                ),
+                                              ),
+                                            ),
+                                            child: new TextFormField(
+                                              controller: text,
+                                              obscureText: false,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                              decoration: new InputDecoration(
+                                                icon: new Icon(
+                                                  Icons.person_outline,
+                                                  color: Colors.white,
+                                                ),
+                                                border: InputBorder.none,
+                                                hintText: "Login",
+                                                hintStyle: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15.0),
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        top: 30.0,
+                                                        right: 30.0,
+                                                        bottom: 30.0,
+                                                        left: 5.0),
+                                              ),
+                                            ),
+                                          ),
+                                          // new InputFieldArea(
+                                          //     hint: "Login",
+                                          //     obscure: false,
+                                          //     icon: Icons.person_outline,
+                                          //     text: text),
+                                          // new InputFieldArea(
+                                          //   hint: "Senha",
+                                          //   obscure: true,
+                                          //   icon: Icons.lock_outline,
+                                          // ),
+                                        ],
+                                      )),
+                                    ],
+                                  ),
+                                ),
+                                new SignUp()
+                              ],
+                            ),
+                            animationStatus == 0
+                                ? new Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 50.0),
+                                    child: new InkWell(
+                                        onTap: () async {
+                                          FirebaseFirestore firestore;
+                                          await Firebase.initializeApp();
+                                          firestore =
+                                              FirebaseFirestore.instance;
+                                          firestore
+                                              .collection("Comissarios")
+                                              .get()
+                                              .then((QuerySnapshot
+                                                      querySnapshot) =>
+                                                  {
+                                                    querySnapshot.docs
+                                                        .forEach((doc) {
+                                                      var a = doc['Logins'];
 
-                                              a.forEach((login) async {
-                                                if (login
-                                                        .toString()
-                                                        .toLowerCase() ==
-                                                    text.text.toLowerCase()) {
-                                                  final prefs =
-                                                      await SharedPreferences
-                                                          .getInstance();
-                                                  prefs.setString(
-                                                      'login', text.text);
-                                                  setState(() {
-                                                    animationStatus = 1;
+                                                      a.forEach((login) async {
+                                                        if (login
+                                                                .toString()
+                                                                .toLowerCase() ==
+                                                            text.text
+                                                                .toLowerCase()) {
+                                                          final prefs =
+                                                              await SharedPreferences
+                                                                  .getInstance();
+                                                          prefs.setString(
+                                                              'login',
+                                                              text.text);
+                                                          setState(() {
+                                                            animationStatus = 1;
+                                                          });
+                                                          _playAnimation();
+                                                        } else {
+                                                          animationStatus = 0;
+                                                        }
+                                                      });
+                                                    })
                                                   });
-                                                  _playAnimation();
-                                                } else {
-                                                  animationStatus = 0;
-                                                }
-                                              });
-                                            })
-                                          });
-                                },
-                                child: new SignIn()),
-                          )
-                        : new StaggerAnimation(
-                            buttonController: _loginButtonController.view),
-                  ],
-                ),
-              ],
-            )),
-          ]),
-        ))));
+                                        },
+                                        child: new SignIn()),
+                                  )
+                                : new StaggerAnimation(
+                                    buttonController:
+                                        _loginButtonController.view),
+                          ],
+                        ),
+                      ],
+                    )),
+                  ]),
+                ))))));
   }
 }
