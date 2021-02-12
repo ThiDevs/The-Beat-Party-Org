@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "495725278826",
+    "project_id": "the-beat-party",
+    "storage_bucket": "the-beat-party.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495725278826:android:8af867f7937551cac3fc13",
+        "android_client_info": {
+          "package_name": "com.thiagoalves.tbp_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495725278826-70e9ggnquuhvq27elp864r17kraj7qtf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thiagoalves.tbp_app",
+            "certificate_hash": "abab310a26c5f66abd4bfc960c5f5125931eec22"
+          }
+        },
+        {
+          "client_id": "495725278826-m8mrb9c0clob69nleflmik05u9b0mh6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoZWrNOh22AGBT-dCTQ-zhQ_xOPAp8RGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495725278826-m8mrb9c0clob69nleflmik05u9b0mh6a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
