@@ -12,7 +12,6 @@ class Routes {
       title: "Dribbble Animation App",
       debugShowCheckedModeBanner: false,
       home: new LoginScreen(),
-      // ignore: missing_return
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case '/login':
@@ -42,6 +41,11 @@ class Routes {
           case '/Lista':
             return new MyCustomRoute(
               builder: (_) => new Lista(args: settings.arguments),
+              settings: settings,
+            );
+          default:
+            return new MyCustomRoute(
+              builder: (_) => new LoginScreen(),
               settings: settings,
             );
         }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tbp_app/Class/Person.dart';
+import 'package:tbp_app/Screens/Home/index.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -68,14 +69,14 @@ class _NovoPagadorState extends State<NovoPagador> {
                   onPressed: () {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
+                        builder: (context) => AdministrativeUvit(),
                       ),
                     );
                   },
                 )
               ],
             ),
-            drawer: LoginScreen(),
+            drawer: AdministrativeUvit(),
             key: _scaffoldkey,
             body: Center(
                 child: new Padding(
@@ -208,101 +209,103 @@ class _NovoPagadorState extends State<NovoPagador> {
                       _tipoIngresso = 3;
                     });
 
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Setting String"),
-                          content: ListView(
-                            children: [
-                              TextField(
-                                controller: name1,
-                                autofocus: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(Icons.person),
-                                    hintText: 'Nome - 1'),
-                              ),
-                              TextField(
-                                controller: cpf1,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(Icons.person),
-                                    hintText: 'CPF/RG - 1'),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              TextField(
-                                controller: name2,
-                                autofocus: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(Icons.person),
-                                    hintText: 'Nome - 2'),
-                              ),
-                              TextField(
-                                controller: cpf2,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(Icons.person),
-                                    hintText: 'CPF/RG - 2'),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              TextField(
-                                controller: name3,
-                                autofocus: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(Icons.person),
-                                    hintText: 'Nome - 3'),
-                              ),
-                              TextField(
-                                controller: cpf3,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    icon: Icon(Icons.person),
-                                    hintText: 'CPF/RG - 3'),
-                              ),
+                    if (_radioValue == 1) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Combo"),
+                            content: ListView(
+                              children: [
+                                TextField(
+                                  controller: name1,
+                                  autofocus: true,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      icon: Icon(Icons.person),
+                                      hintText: 'Nome - 1'),
+                                ),
+                                TextField(
+                                  controller: cpf1,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      icon: Icon(Icons.person),
+                                      hintText: 'CPF/RG - 1'),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                TextField(
+                                  controller: name2,
+                                  autofocus: true,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      icon: Icon(Icons.person),
+                                      hintText: 'Nome - 2'),
+                                ),
+                                TextField(
+                                  controller: cpf2,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      icon: Icon(Icons.person),
+                                      hintText: 'CPF/RG - 2'),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                TextField(
+                                  controller: name3,
+                                  autofocus: true,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      icon: Icon(Icons.person),
+                                      hintText: 'Nome - 3'),
+                                ),
+                                TextField(
+                                  controller: cpf3,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      icon: Icon(Icons.person),
+                                      hintText: 'CPF/RG - 3'),
+                                ),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  var person1 = new Person();
+                                  person1.name = name1.text;
+                                  person1.cpf = cpf1.text;
+                                  person1.tipoIngresso = 3;
+                                  person1.sexo = 1;
+
+                                  persons.add(person1);
+
+                                  var person2 = new Person();
+                                  person2.name = name2.text;
+                                  person2.cpf = cpf2.text;
+                                  person2.tipoIngresso = 3;
+                                  person2.sexo = 1;
+
+                                  persons.add(person2);
+
+                                  var person3 = new Person();
+                                  person3.name = name3.text;
+                                  person3.cpf = cpf3.text;
+                                  person3.tipoIngresso = 3;
+                                  person3.sexo = 1;
+
+                                  persons.add(person3);
+
+                                  Navigator.pop(context, name1.text);
+                                },
+                              )
                             ],
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text("OK"),
-                              onPressed: () {
-                                var person1 = new Person();
-                                person1.name = name1.text;
-                                person1.cpf = cpf1.text;
-                                person1.tipoIngresso = 3;
-                                person1.sexo = 1;
-
-                                persons.add(person1);
-
-                                var person2 = new Person();
-                                person2.name = name2.text;
-                                person2.cpf = cpf2.text;
-                                person2.tipoIngresso = 3;
-                                person2.sexo = 1;
-
-                                persons.add(person2);
-
-                                var person3 = new Person();
-                                person3.name = name3.text;
-                                person3.cpf = cpf3.text;
-                                person3.tipoIngresso = 3;
-                                person3.sexo = 1;
-
-                                persons.add(person3);
-
-                                Navigator.pop(context, name1.text);
-                              },
-                            )
-                          ],
-                        );
-                      },
-                    );
+                          );
+                        },
+                      );
+                    }
                   },
                   child: new Container(
                     height: 75.0,

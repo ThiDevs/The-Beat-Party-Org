@@ -37,7 +37,7 @@ class _ListaState extends State<Lista> {
                   onPressed: () {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
+                        builder: (context) => AdministrativeUvit(),
                       ),
                     );
                   },
@@ -72,34 +72,6 @@ class _ListaState extends State<Lista> {
                         TableCell(child: Center(child: Text(''))),
                       ]),
                       for (var item in widget.args) item
-
-                      // new Padding(
-                      //     padding: const EdgeInsets.only(top: 12.0),
-                      //     child: Table(columnWidths: {
-                      //       1: FractionColumnWidth(.4),
-                      //     }, children: [
-                      //       TableRow(children: [
-                      //         TableCell(
-                      //           child: Row(
-                      //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      //             children: [
-                      //               Text('Nome'),
-                      //               Text('CPF/RG'),
-                      //               Text('Sexo'),
-                      //               Text('Tipo do Ingresso')
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       ]),
-                      //       TableRow(children: [
-                      //         TableCell(
-                      //           child: Row(
-                      //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      //             children: [Text('')],
-                      //           ),
-                      //         ),
-                      //       ]),
-                      //     ]))
                     ])))
       ],
     );

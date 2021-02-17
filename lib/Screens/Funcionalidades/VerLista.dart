@@ -71,7 +71,7 @@ class _VerListaState extends State<VerLista> {
                   onPressed: () {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
+                        builder: (context) => AdministrativeUvit(),
                       ),
                     );
                   },
@@ -111,7 +111,7 @@ class _CardDash extends StatelessWidget {
     firestore = FirebaseFirestore.instance;
     firestore
         .collection("User")
-        .where('Login', isEqualTo: _login)
+        .where('Login', isEqualTo: _login.toLowerCase())
         .get()
         .then((QuerySnapshot querySnapshot) => {
               querySnapshot.docs.forEach((doc) {

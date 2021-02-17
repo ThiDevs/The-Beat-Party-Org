@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
+import 'package:tbp_app/Screens/Restart/RestartApp.dart';
 
 class AdministrativeUvit extends StatefulWidget {
   @override
@@ -14,13 +15,9 @@ class _AdministrativeUvitState extends State<AdministrativeUvit> {
   var _scaffoldkey = GlobalKey<ScaffoldState>();
   List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
     const StaggeredTile.count(2, 0.5),
-    const StaggeredTile.count(1, 1),
-    const StaggeredTile.count(1, 1),
-    const StaggeredTile.count(1, 1),
-    const StaggeredTile.count(1, 1.5),
-    const StaggeredTile.count(1, 1.5),
+    const StaggeredTile.count(2, 0.5),
   ];
-  List<Widget> _tiles = <Widget>[
+  List<Widget> _tiles = const <Widget>[
     _CardDash(Colors.green, Icons.attach_money, "Cadastrar"),
   ];
   Future<void> _getList() async {
@@ -42,6 +39,33 @@ class _AdministrativeUvitState extends State<AdministrativeUvit> {
     });
   }
 
+  Future<void> _resetVariables() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('login');
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
+
+  Future<bool> _onWillPop() async {
+    return showDialog(
+          context: context,
+          child: new AlertDialog(
+            title: new Text('Você tem certeza que quer sair?'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('Não'),
+              ),
+              new FlatButton(
+                onPressed: () async => _resetVariables(),
+                child: new Text('Sim'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     _getList();
@@ -53,49 +77,45 @@ class _AdministrativeUvitState extends State<AdministrativeUvit> {
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.cover,
         ),
-        Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.red,
-              title: const Text("Dashboard"),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.home),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
-            drawer: LoginScreen(),
-            key: _scaffoldkey,
-            body: new Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: new StaggeredGridView.count(
-                  crossAxisCount: 2,
-                  staggeredTiles: _staggeredTiles,
-                  children: _tiles,
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  padding: const EdgeInsets.all(4.0),
-                )))
+        (new WillPopScope(
+            onWillPop: _onWillPop,
+            child: Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  backgroundColor: Colors.red,
+                  title: const Text("Dashboard"),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.home),
+                      onPressed: () {
+                        // RestartWidget.restartApp(context);
+                      },
+                    )
+                  ],
+                ),
+                drawer: AdministrativeUvit(),
+                key: _scaffoldkey,
+                body: new Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: new StaggeredGridView.count(
+                      crossAxisCount: 2,
+                      staggeredTiles: _staggeredTiles,
+                      children: _tiles,
+                      mainAxisSpacing: 4.0,
+                      crossAxisSpacing: 4.0,
+                      padding: const EdgeInsets.all(4.0),
+                    )))))
       ],
     );
   }
 }
 
 class _CardDash extends StatelessWidget {
-  _CardDash(this.backgroundColor, this.iconData, this.title);
+  const _CardDash(this.backgroundColor, this.iconData, this.title);
 
   final Color backgroundColor;
   final IconData iconData;
   final String title;
-
-  FirebaseFirestore firestore;
 
   Future<void> _goLista(context) async {
     var lista = new List<TableRow>();
@@ -118,27 +138,30 @@ class _CardDash extends StatelessWidget {
                   TableCell(
                     child: Center(child: Text(doc['Cpf'])),
                   ),
-                  TableCell(child: Center(child: Text(doc['Sexo'].toString()))),
                   TableCell(
-                      child:
-                          Center(child: Text(doc['TipoIngresso'].toString()))),
+                      child: Center(
+                          child: Text(
+                              doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
+                  TableCell(
+                      child: Center(
+                          child: Text((doc['TipoIngresso'] == 3
+                              ? "Combo"
+                              : (doc['TipoIngresso'] == 2
+                                  ? "Normal"
+                                  : "Pré-Venda"))))),
                 ]));
               }),
-              Navigator.pushNamed(context, "/" + (admin ? title : "Lista"),
+              Navigator.pushNamed(
+                  context,
+                  "/" +
+                      (title == "Cadastrar"
+                          ? "Cadastrar"
+                          : admin
+                              ? title
+                              : "Lista"),
                   arguments: lista)
             });
   }
-
-  // void inicialize() async {
-  //   await Firebase.initializeApp();
-  //   firestore = FirebaseFirestore.instance;
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final login = prefs.getString('login') ?? "";
-  //   var admins = ['jhoni.blu', 'gabe.red', 'jubsricardo', 'a'];
-  //   if (!admins.contains(login)) {
-  //     _CardDash(null, null, "Lista", login)._goLista(context);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
