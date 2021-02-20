@@ -60,7 +60,7 @@ class LoginScreenState extends State<LoginScreen>
   Future<bool> _onWillPop() {
     return showDialog(
           context: context,
-          child: new AlertDialog(
+          builder: (_) => new AlertDialog(
             title: new Text('Você tem certeza que quer sair?'),
             actions: <Widget>[
               new FlatButton(

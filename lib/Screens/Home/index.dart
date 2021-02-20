@@ -49,7 +49,7 @@ class _AdministrativeUvitState extends State<AdministrativeUvit> {
   Future<bool> _onWillPop() async {
     return showDialog(
           context: context,
-          child: new AlertDialog(
+          builder: (_) => new AlertDialog(
             title: new Text('Você tem certeza que quer sair?'),
             actions: <Widget>[
               new FlatButton(
