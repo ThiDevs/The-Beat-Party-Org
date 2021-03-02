@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tbp_app/Screens/Funcionalidades/VerLista.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
 import 'package:tbp_app/Screens/Restart/RestartApp.dart';
 
@@ -127,40 +128,54 @@ class _CardDash extends StatelessWidget {
     var admins = ['jhoni.blu', 'gabe.red', 'jubsricardo', 'a'];
     var admin = false;
     if (admins.contains(login)) admin = true;
-    firestore
-        .collection("User")
-        .where('Login', isEqualTo: login)
-        .get()
-        .then((QuerySnapshot querySnapshot) => {
-              querySnapshot.docs.forEach((doc) {
-                lista.add(TableRow(children: [
-                  TableCell(child: Center(child: Text(doc['Nome']))),
-                  TableCell(
-                    child: Center(child: Text(doc['Cpf'])),
-                  ),
-                  TableCell(
-                      child: Center(
-                          child: Text(
-                              doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
-                  TableCell(
-                      child: Center(
-                          child: Text((doc['TipoIngresso'] == 3
-                              ? "Combo"
-                              : (doc['TipoIngresso'] == 2
-                                  ? "Normal"
-                                  : "Pré-Venda"))))),
-                ]));
-              }),
-              Navigator.pushNamed(
-                  context,
-                  "/" +
-                      (title == "Cadastrar"
-                          ? "Cadastrar"
-                          : admin
-                              ? title
-                              : "Lista"),
-                  arguments: lista)
-            });
+    Query col;
+    if (login.contains("Todos"))
+      col = firestore.collection("User").orderBy("Nome");
+    else
+      col = firestore
+          .collection("User")
+          .where('Login', isEqualTo: login.toLowerCase())
+          .orderBy("Nome");
+
+    var preco = 0.00;
+    var count = 0;
+    col.get().then((QuerySnapshot querySnapshot) => {
+          querySnapshot.docs.forEach((doc) {
+            preco += doc['TipoIngresso'] == 3
+                ? 15
+                : (doc['TipoIngresso'] == 2 ? 30 : 20);
+            count += 1;
+            lista.add(TableRow(children: [
+              TableCell(child: Center(child: Text(doc['Nome']))),
+              TableCell(
+                child: Center(
+                    child: Text(doc['Cpf'].toString().length > 10
+                        ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
+                        : doc['Cpf'])),
+              ),
+              TableCell(
+                  child: Center(
+                      child:
+                          Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
+              TableCell(
+                  child: Center(
+                      child: Text((doc['TipoIngresso'] == 3
+                          ? "Combo"
+                          : (doc['TipoIngresso'] == 2
+                              ? "Normal"
+                              : "Pré-Venda"))))),
+            ]));
+          }),
+          Navigator.pushNamed(
+              context,
+              "/" +
+                  (title == "Cadastrar"
+                      ? "Cadastrar"
+                      : admin
+                          ? title
+                          : "Lista"),
+              arguments: new ListaInfo(preco, count, lista, login)),
+        });
   }
 
   @override
