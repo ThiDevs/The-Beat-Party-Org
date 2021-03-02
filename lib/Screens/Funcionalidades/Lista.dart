@@ -3,8 +3,10 @@ import 'package:tbp_app/Class/Person.dart';
 import 'package:tbp_app/Screens/Home/index.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
 
+import 'VerLista.dart';
+
 class Lista extends StatefulWidget {
-  var args = new List<TableRow>();
+  final ListaInfo args;
 
   Lista({Key key, @required this.args}) : super(key: key);
 
@@ -14,7 +16,6 @@ class Lista extends StatefulWidget {
 
 class _ListaState extends State<Lista> {
   var _scaffoldkey = GlobalKey<ScaffoldState>();
-  List<Person> persons = new List<Person>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class _ListaState extends State<Lista> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.black,
-              title: const Text("lista"),
+              title: Text("${widget.args.login}"),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.home),
@@ -55,6 +56,26 @@ class _ListaState extends State<Lista> {
                         style: BorderStyle.none),
                     children: [
                       TableRow(children: [
+                        TableCell(
+                            child: Center(
+                                child: Text(
+                                    'Quantidade: ${widget.args.Length} ingressos.'))),
+                        TableCell(child: Center(child: Text(''))),
+                        TableCell(child: Center(child: Text(''))),
+                        TableCell(
+                            child: Center(
+                                child: Text(
+                                    'Total: R\$ ${widget.args.PrecoTotal}'))),
+                      ]),
+                      TableRow(children: [
+                        TableCell(child: Center(child: Text(''))),
+                        TableCell(
+                          child: Center(child: Text('')),
+                        ),
+                        TableCell(child: Center(child: Text(''))),
+                        TableCell(child: Center(child: Text(''))),
+                      ]),
+                      TableRow(children: [
                         TableCell(child: Center(child: Text('Nome'))),
                         TableCell(
                           child: Center(child: Text('CPF/RG')),
@@ -71,7 +92,7 @@ class _ListaState extends State<Lista> {
                         TableCell(child: Center(child: Text(''))),
                         TableCell(child: Center(child: Text(''))),
                       ]),
-                      for (var item in widget.args) item
+                      for (var item in widget.args.lista) item
                     ])))
       ],
     );

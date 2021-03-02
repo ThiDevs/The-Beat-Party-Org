@@ -9,7 +9,7 @@ import 'Screens/Funcionalidades/Lista.dart';
 class Routes {
   Routes() {
     runApp(new MaterialApp(
-      title: "Dribbble Animation App",
+      title: "The Beat Party Org",
       debugShowCheckedModeBanner: false,
       home: new LoginScreen(),
       onGenerateRoute: (RouteSettings settings) {

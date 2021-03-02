@@ -24,10 +24,6 @@ class _VerListaState extends State<VerLista> {
     firestore = FirebaseFirestore.instance;
     final prefs = await SharedPreferences.getInstance();
     final login = prefs.getString('login') ?? "";
-    // var admins = ['jhoni.blu', 'gabe.red', 'jubsricardo', 'a'];
-    // if (!admins.contains(login)) {
-    //   _CardDash(null, null, "Lista", login)._goLista(context);
-    // }
   }
 
   List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
@@ -95,6 +91,14 @@ class _VerListaState extends State<VerLista> {
   }
 }
 
+class ListaInfo {
+  ListaInfo(this.PrecoTotal, this.Length, this.lista, this.login);
+  final double PrecoTotal;
+  final int Length;
+  final List<TableRow> lista;
+  final String login;
+}
+
 class _CardDash extends StatelessWidget {
   const _CardDash(this.backgroundColor, this.iconData, this.title, this._login);
 
@@ -109,32 +113,47 @@ class _CardDash extends StatelessWidget {
     FirebaseFirestore firestore;
     await Firebase.initializeApp();
     firestore = FirebaseFirestore.instance;
-    firestore
-        .collection("User")
-        .where('Login', isEqualTo: _login.toLowerCase())
-        .get()
-        .then((QuerySnapshot querySnapshot) => {
-              querySnapshot.docs.forEach((doc) {
-                lista.add(TableRow(children: [
-                  TableCell(child: Center(child: Text(doc['Nome']))),
-                  TableCell(
-                    child: Center(child: Text(doc['Cpf'])),
-                  ),
-                  TableCell(
-                      child: Center(
-                          child: Text(
-                              doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
-                  TableCell(
-                      child: Center(
-                          child: Text((doc['TipoIngresso'] == 3
-                              ? "Combo"
-                              : (doc['TipoIngresso'] == 2
-                                  ? "Normal"
-                                  : "Pré-Venda"))))),
-                ]));
-              }),
-              Navigator.pushNamed(context, "/" + this.title, arguments: lista)
-            });
+    Query col;
+    if (_login.contains("Todos"))
+      col = firestore.collection("User").orderBy("Nome");
+    else
+      col = firestore
+          .collection("User")
+          .where('Login', isEqualTo: _login.toLowerCase())
+          .orderBy("Nome");
+
+    var preco = 0.00;
+    var count = 0;
+    col.get().then((QuerySnapshot querySnapshot) => {
+          querySnapshot.docs.forEach((doc) {
+            preco += doc['TipoIngresso'] == 3
+                ? 15
+                : (doc['TipoIngresso'] == 2 ? 30 : 20);
+            count += 1;
+            lista.add(TableRow(children: [
+              TableCell(child: Center(child: Text(doc['Nome']))),
+              TableCell(
+                child: Center(
+                    child: Text(doc['Cpf'].toString().length > 10
+                        ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
+                        : doc['Cpf'])),
+              ),
+              TableCell(
+                  child: Center(
+                      child:
+                          Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
+              TableCell(
+                  child: Center(
+                      child: Text((doc['TipoIngresso'] == 3
+                          ? "Combo"
+                          : (doc['TipoIngresso'] == 2
+                              ? "Normal"
+                              : "Pré-Venda"))))),
+            ]));
+          }),
+          Navigator.pushNamed(context, "/" + this.title,
+              arguments: new ListaInfo(preco, count, lista, _login)),
+        });
   }
 
   @override

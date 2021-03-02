@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,14 +22,44 @@ class LoginScreen extends StatefulWidget {
   LoginScreenState createState() => new LoginScreenState();
 }
 
+String testDevice = 'YOUR_DEVICE_ID';
+
 class LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   AnimationController _loginButtonController;
   var animationStatus = 0;
   VideoPlayerController _controller;
   final text = TextEditingController();
+
   @override
   void initState() {
+    MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+      testDevices: testDevice != null ? <String>[testDevice] : null,
+      keywords: <String>['foo', 'bar'],
+      contentUrl: 'http://foo.com/bar.html',
+      childDirected: true,
+      nonPersonalizedAds: true,
+    );
+
+    BannerAd myBanner = BannerAd(
+      // adUnitId: BannerAd.testAdUnitId,
+      adUnitId: 'ca-app-pub-4653575622321119/4338056837',
+      size: AdSize.smartBanner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event is $event");
+      },
+    );
+
+    FirebaseAdMob.instance
+        .initialize(appId: "ca-app-pub-4653575622321119~7316763338");
+
+    myBanner
+      ..load()
+      ..show(
+        anchorType: AnchorType.bottom,
+      );
+
     super.initState();
     // _controller = VideoPlayerController.asset(
     //     'assets/video_login2.mp4')
