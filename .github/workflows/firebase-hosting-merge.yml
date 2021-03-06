@@ -18,7 +18,7 @@ jobs:
       
       # - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
-      - run: firebase deploy 
+      # - run: firebase deploy 
         working-directory: ./Hosting
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
