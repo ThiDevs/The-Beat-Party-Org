@@ -12,6 +12,7 @@ jobs:
     env: 
       working-directory: ./Hosting
       FIREBASE_TOKEN:  ${{ secrets.FIREBASE_TOKEN }}
+      PROJECT_PATH: ./Hosting
 
     steps:
       - uses: actions/checkout@v2
