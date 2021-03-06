@@ -12,7 +12,6 @@ jobs:
     env: 
       working-directory: ./Hosting
       FIREBASE_TOKEN:  ${{ secrets.FIREBASE_TOKEN }}
-      PROJECT_PATH: ./Hosting
 
     steps:
       - uses: actions/checkout@v2
@@ -22,6 +21,5 @@ jobs:
         uses: w9jds/firebase-action@master
         with:
           args: deploy 
-      # working-directory: ./Hosting
 
     
