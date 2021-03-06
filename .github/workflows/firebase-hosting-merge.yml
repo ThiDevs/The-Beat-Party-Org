@@ -17,10 +17,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
       - run: flutter build web
-      # - uses: FirebaseExtended/action-hosting-deploy@v0
-      - uses: w9jds/firebase-action@v2.0.0
-      with:
-        args: deploy
-      working-directory: ./Hosting
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy 
+      # working-directory: ./Hosting
 
     
