@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tbp_app/Class/Person.dart';
 import 'package:tbp_app/Screens/Home/index.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
@@ -17,8 +18,21 @@ class Lista extends StatefulWidget {
 class _ListaState extends State<Lista> {
   var _scaffoldkey = GlobalKey<ScaffoldState>();
 
+  Future<void> _GetLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final login = prefs.getString('login') ?? "";
+    var admins = ['jhoni.blu', 'gabe.red', 'a'];
+    setState(() {
+      show = admins.contains(login);
+    });
+  }
+
+  var show = false;
+
   @override
   Widget build(BuildContext context) {
+    var admins = ['jhoni.blu', 'gabe.red', 'a'];
+    _GetLogin();
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -64,8 +78,10 @@ class _ListaState extends State<Lista> {
                         TableCell(child: Center(child: Text(''))),
                         TableCell(
                             child: Center(
-                                child: Text(
-                                    'Total: R\$ ${widget.args.PrecoTotal}'))),
+                                child: show
+                                    ? Text(
+                                        'Total: R\$ ${widget.args.PrecoTotal}')
+                                    : null)),
                       ]),
                       TableRow(children: [
                         TableCell(child: Center(child: Text(''))),
