@@ -67,14 +67,10 @@ class _ListaState extends State<Lista> {
                         style: BorderStyle.none),
                     children: [
                       TableRow(children: [
-                        TableRowInkWell(
-                            onTap: () {
-                              // var a = 1 + 1;
-                            },
-                            child: TableCell(
-                                child: Center(
-                                    child: Text(
-                                        'Quantidade: ${widget.args.length} ingressos.')))),
+                        TableCell(
+                            child: Center(
+                                child: Text(
+                                    'Quantidade: ${widget.args.length} ingressos.'))),
                         TableCell(child: Center(child: Text(''))),
                         TableCell(child: Center(child: Text(''))),
                         TableCell(
@@ -85,10 +81,7 @@ class _ListaState extends State<Lista> {
                                     : null)),
                       ]),
                       TableRow(children: [
-                        TableRowInkWell(
-                          onTap: () {},
-                          child: TableCell(child: Center(child: Text(''))),
-                        ),
+                        TableCell(child: Center(child: Text(''))),
                         TableCell(
                           child: Center(child: Text('')),
                         ),

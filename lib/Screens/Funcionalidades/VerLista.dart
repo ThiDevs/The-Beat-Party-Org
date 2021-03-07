@@ -127,36 +127,24 @@ class _CardDash extends StatelessWidget {
                 : (doc['TipoIngresso'] == 2 ? 30 : 20);
             count += 1;
             lista.add(TableRow(children: [
-              TableRowInkWell(
-                onTap: () {},
-                child: TableCell(child: Center(child: Text(doc['Nome']))),
+              TableCell(child: Center(child: Text(doc['Nome']))),
+              TableCell(
+                child: Center(
+                    child: Text(doc['Cpf'].toString().length > 10
+                        ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
+                        : doc['Cpf'])),
               ),
-              TableRowInkWell(
-                onTap: () {},
-                child: TableCell(
+              TableCell(
                   child: Center(
-                      child: Text(doc['Cpf'].toString().length > 10
-                          ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
-                          : doc['Cpf'])),
-                ),
-              ),
-              TableRowInkWell(
-                onTap: () {},
-                child: TableCell(
-                    child: Center(
-                        child:
-                            Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
-              ),
-              TableRowInkWell(
-                onTap: () {},
-                child: TableCell(
-                    child: Center(
-                        child: Text((doc['TipoIngresso'] == 3
-                            ? "Combo"
-                            : (doc['TipoIngresso'] == 2
-                                ? "Normal"
-                                : "Pré-Venda"))))),
-              )
+                      child:
+                          Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
+              TableCell(
+                  child: Center(
+                      child: Text((doc['TipoIngresso'] == 3
+                          ? "Combo"
+                          : (doc['TipoIngresso'] == 2
+                              ? "Normal"
+                              : "Pré-Venda"))))),
             ]));
           }),
           Navigator.pushNamed(context, "/" + this.title,
