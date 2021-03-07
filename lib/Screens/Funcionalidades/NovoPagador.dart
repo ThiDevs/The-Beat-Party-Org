@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tbp_app/Class/Person.dart';
 import 'package:tbp_app/Screens/Home/index.dart';
-import 'package:tbp_app/Screens/Login/index.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NovoPagador extends StatefulWidget {
   @override
@@ -29,7 +27,7 @@ class _NovoPagadorState extends State<NovoPagador> {
   TextEditingController cpf = new TextEditingController();
   TextEditingController number = new TextEditingController();
 
-  List<Person> persons = new List<Person>();
+  List<Person> persons = [];
 
   int _radioValue = 0;
   int _tipoIngresso = 0;
@@ -271,7 +269,7 @@ class _NovoPagadorState extends State<NovoPagador> {
                               ],
                             ),
                             actions: <Widget>[
-                              FlatButton(
+                              TextButton(
                                 child: Text("OK"),
                                 onPressed: () {
                                   var person1 = new Person();
@@ -394,7 +392,7 @@ class _NovoPagadorState extends State<NovoPagador> {
                       title: new Text("Salvo com Sucesso"),
                       content: new Text("Sucesso"),
                       actions: <Widget>[
-                        new FlatButton(
+                        new TextButton(
                           child: new Text("Ok"),
                           onPressed: () {
                             Navigator.of(context).pop();

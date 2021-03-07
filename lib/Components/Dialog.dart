@@ -10,11 +10,11 @@ TextEditingController name3 = new TextEditingController();
 TextEditingController cpf3 = new TextEditingController();
 
 showAlertDialog2(BuildContext context) {
-  Widget cancelaButton = FlatButton(
+  Widget cancelaButton = TextButton(
     child: Text("Cancelar"),
     onPressed: () {},
   );
-  Widget continuaButton = FlatButton(
+  Widget continuaButton = TextButton(
     child: Text("Continuar"),
     onPressed: () {
       Navigator.pop(context, "teste");

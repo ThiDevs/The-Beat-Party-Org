@@ -26,16 +26,16 @@ class ImageBackground extends StatelessWidget {
         height: screenSize.height / 2.5,
         decoration: new BoxDecoration(image: backgroundImage),
         child: new Container(
-          decoration: new BoxDecoration(
-              gradient: new LinearGradient(
-            // colors: <Color>[
-            //   const Color.fromRGBO(110, 101, 103, 0.6),
-            //   const Color.fromRGBO(51, 51, 63, 0.9),
-            // ],
-            // stops: [0.2, 1.0],
-            begin: const FractionalOffset(0.0, 0.0),
-            end: const FractionalOffset(0.0, 1.0),
-          )),
+          // decoration: new BoxDecoration(
+          //     gradient: new LinearGradient(
+          //   // colors: <Color>[
+          //   //   const Color.fromRGBO(110, 101, 103, 0.6),
+          //   //   const Color.fromRGBO(51, 51, 63, 0.9),
+          //   // ],
+          //   // stops: [0.2, 1.0],
+          //   begin: const FractionalOffset(0.0, 0.0),
+          //   end: const FractionalOffset(0.0, 1.0),
+          // )),
           child: isLandscape
               ? new ListView(
                   children: <Widget>[

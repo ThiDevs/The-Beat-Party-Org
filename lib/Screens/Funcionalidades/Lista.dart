@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tbp_app/Class/Person.dart';
 import 'package:tbp_app/Screens/Home/index.dart';
-import 'package:tbp_app/Screens/Login/index.dart';
 
 import 'VerLista.dart';
 
@@ -18,7 +16,7 @@ class Lista extends StatefulWidget {
 class _ListaState extends State<Lista> {
   var _scaffoldkey = GlobalKey<ScaffoldState>();
 
-  Future<void> _GetLogin() async {
+  Future<void> getLogin() async {
     final prefs = await SharedPreferences.getInstance();
     final login = prefs.getString('login') ?? "";
     var admins = ['jhoni.blu', 'gabe.red', 'a'];
@@ -31,8 +29,7 @@ class _ListaState extends State<Lista> {
 
   @override
   Widget build(BuildContext context) {
-    var admins = ['jhoni.blu', 'gabe.red', 'a'];
-    _GetLogin();
+    getLogin();
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -72,26 +69,24 @@ class _ListaState extends State<Lista> {
                       TableRow(children: [
                         TableRowInkWell(
                             onTap: () {
-                              var a = 1 + 1;
+                              // var a = 1 + 1;
                             },
                             child: TableCell(
                                 child: Center(
                                     child: Text(
-                                        'Quantidade: ${widget.args.Length} ingressos.')))),
+                                        'Quantidade: ${widget.args.length} ingressos.')))),
                         TableCell(child: Center(child: Text(''))),
                         TableCell(child: Center(child: Text(''))),
                         TableCell(
                             child: Center(
                                 child: show
                                     ? Text(
-                                        'Total: R\$ ${widget.args.PrecoTotal}')
+                                        'Total: R\$ ${widget.args.precoTotal}')
                                     : null)),
                       ]),
                       TableRow(children: [
                         TableRowInkWell(
-                          onTap: () {
-                            var a = 1 + 1;
-                          },
+                          onTap: () {},
                           child: TableCell(child: Center(child: Text(''))),
                         ),
                         TableCell(

@@ -3,7 +3,6 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tbp_app/Components/InputFields.dart';
 import 'styles.dart';
 import 'loginAnimation.dart';
 import 'package:flutter/foundation.dart';
@@ -11,10 +10,7 @@ import 'package:flutter/animation.dart';
 import 'dart:async';
 import '../../Components/SignUpLink.dart';
 import '../../Components/SignInButton.dart';
-import '../../Components/WhiteTick.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
-import 'package:video_player/video_player.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key key}) : super(key: key);
@@ -28,7 +24,7 @@ class LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   AnimationController _loginButtonController;
   var animationStatus = 0;
-  VideoPlayerController _controller;
+  // VideoPlayerController _controller;
   final text = TextEditingController();
 
   @override
@@ -94,11 +90,11 @@ class LoginScreenState extends State<LoginScreen>
           builder: (_) => new AlertDialog(
             title: new Text('Você tem certeza que quer sair?'),
             actions: <Widget>[
-              new FlatButton(
+              new TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text('Não'),
               ),
-              new FlatButton(
+              new TextButton(
                 onPressed: () =>
                     Navigator.pushReplacementNamed(context, "/login"),
                 child: new Text('Sim'),

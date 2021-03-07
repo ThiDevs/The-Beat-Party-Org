@@ -5,7 +5,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tbp_app/Screens/Funcionalidades/VerLista.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
-import 'package:tbp_app/Screens/Restart/RestartApp.dart';
 
 class AdministrativeUvit extends StatefulWidget {
   @override
@@ -53,11 +52,11 @@ class _AdministrativeUvitState extends State<AdministrativeUvit> {
           builder: (_) => new AlertDialog(
             title: new Text('Você tem certeza que quer sair?'),
             actions: <Widget>[
-              new FlatButton(
+              new TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text('Não'),
               ),
-              new FlatButton(
+              new TextButton(
                 onPressed: () async => _resetVariables(),
                 child: new Text('Sim'),
               ),
@@ -119,7 +118,7 @@ class _CardDash extends StatelessWidget {
   final String title;
 
   Future<void> _goLista(context) async {
-    var lista = new List<TableRow>();
+    List<TableRow> lista = [];
     FirebaseFirestore firestore;
     await Firebase.initializeApp();
     firestore = FirebaseFirestore.instance;

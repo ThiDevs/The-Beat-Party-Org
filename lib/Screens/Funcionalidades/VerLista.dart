@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tbp_app/Class/Person.dart';
 import 'package:tbp_app/Screens/Home/index.dart';
-import 'package:tbp_app/Screens/Login/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -15,15 +13,13 @@ class VerLista extends StatefulWidget {
 class _VerListaState extends State<VerLista> {
   var _scaffoldkey = GlobalKey<ScaffoldState>();
 
-  List<Person> persons = new List<Person>();
+  List<Person> persons = [];
 
   FirebaseFirestore firestore;
 
   void inicialize() async {
     await Firebase.initializeApp();
     firestore = FirebaseFirestore.instance;
-    final prefs = await SharedPreferences.getInstance();
-    final login = prefs.getString('login') ?? "";
   }
 
   List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
@@ -92,9 +88,9 @@ class _VerListaState extends State<VerLista> {
 }
 
 class ListaInfo {
-  ListaInfo(this.PrecoTotal, this.Length, this.lista, this.login);
-  final double PrecoTotal;
-  final int Length;
+  ListaInfo(this.precoTotal, this.length, this.lista, this.login);
+  final double precoTotal;
+  final int length;
   final List<TableRow> lista;
   final String login;
 }
@@ -131,25 +127,36 @@ class _CardDash extends StatelessWidget {
                 : (doc['TipoIngresso'] == 2 ? 30 : 20);
             count += 1;
             lista.add(TableRow(children: [
-              
-              TableCell(child: Center(child: Text(doc['Nome']))),
-              TableCell(
-                child: Center(
-                    child: Text(doc['Cpf'].toString().length > 10
-                        ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
-                        : doc['Cpf'])),
+              TableRowInkWell(
+                onTap: () {},
+                child: TableCell(child: Center(child: Text(doc['Nome']))),
               ),
-              TableCell(
+              TableRowInkWell(
+                onTap: () {},
+                child: TableCell(
                   child: Center(
-                      child:
-                          Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
-              TableCell(
-                  child: Center(
-                      child: Text((doc['TipoIngresso'] == 3
-                          ? "Combo"
-                          : (doc['TipoIngresso'] == 2
-                              ? "Normal"
-                              : "Pré-Venda"))))),
+                      child: Text(doc['Cpf'].toString().length > 10
+                          ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
+                          : doc['Cpf'])),
+                ),
+              ),
+              TableRowInkWell(
+                onTap: () {},
+                child: TableCell(
+                    child: Center(
+                        child:
+                            Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
+              ),
+              TableRowInkWell(
+                onTap: () {},
+                child: TableCell(
+                    child: Center(
+                        child: Text((doc['TipoIngresso'] == 3
+                            ? "Combo"
+                            : (doc['TipoIngresso'] == 2
+                                ? "Normal"
+                                : "Pré-Venda"))))),
+              )
             ]));
           }),
           Navigator.pushNamed(context, "/" + this.title,

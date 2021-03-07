@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:tbp_app/widgets/rounded_button.dart';
 import 'package:flutter_lottie/flutter_lottie.dart';
 
+// ignore: must_be_immutable
 class WelcomeTab extends StatelessWidget {
-  WelcomeTab({
-    @required AnimationController animationController,
-    @required this.onPressed
-  }) : onboardingEnterAnimation = WelcomeTabEnterAnimation(animationController);
+  WelcomeTab(
+      {@required AnimationController animationController,
+      @required this.onPressed})
+      : onboardingEnterAnimation =
+            WelcomeTabEnterAnimation(animationController);
 
   final Function onPressed;
   final WelcomeTabEnterAnimation onboardingEnterAnimation;
@@ -29,33 +31,36 @@ class WelcomeTab extends StatelessWidget {
   }
 
   buildImage(BuildContext context) => FadeTransition(
-    opacity: onboardingEnterAnimation.welcomeLabelOpacity,
-    child: Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-      child: LottieView.fromFile(
-        filePath: "animations/record.json",
-        autoPlay: true,
-        loop: true,
-        reverse: true,
-        onViewCreated: (controller) {
-          this.controller = controller;
-        },
-      ),
-    ),
-  );
+        opacity: onboardingEnterAnimation.welcomeLabelOpacity,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          child: LottieView.fromFile(
+            filePath: "animations/record.json",
+            autoPlay: true,
+            loop: true,
+            reverse: true,
+            onViewCreated: (controller) {
+              this.controller = controller;
+            },
+          ),
+        ),
+      );
 
   buildDescriptionLabel(BuildContext context) => FadeTransition(
-    opacity: onboardingEnterAnimation.subheaderOpacity,
-    child: Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-      child: Text(
-	      "Bem vindo!",
-        style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w400, fontSize: MediaQuery.of(context).size.shortestSide * 0.04),
-        softWrap: true,
-        textAlign: TextAlign.center,
-      ),
-    ),
-  );
+        opacity: onboardingEnterAnimation.subheaderOpacity,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          child: Text(
+            "Bem vindo!",
+            style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.w400,
+                fontSize: MediaQuery.of(context).size.shortestSide * 0.04),
+            softWrap: true,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
 
   Widget buttonStart(BuildContext context) {
     return Transform(
