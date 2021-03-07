@@ -131,6 +131,7 @@ class _CardDash extends StatelessWidget {
                 : (doc['TipoIngresso'] == 2 ? 30 : 20);
             count += 1;
             lista.add(TableRow(children: [
+              
               TableCell(child: Center(child: Text(doc['Nome']))),
               TableCell(
                 child: Center(
