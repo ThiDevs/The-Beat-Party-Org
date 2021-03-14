@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -12,6 +13,36 @@ class AdministrativeUvit extends StatefulWidget {
 }
 
 class _AdministrativeUvitState extends State<AdministrativeUvit> {
+  @override
+  void initState() {
+    MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+      testDevices: testDevice != null ? <String>[testDevice] : null,
+      keywords: <String>['foo', 'bar'],
+      contentUrl: 'http://foo.com/bar.html',
+      childDirected: true,
+      nonPersonalizedAds: true,
+    );
+
+    BannerAd myBanner = BannerAd(
+      // adUnitId: BannerAd.testAdUnitId,
+      adUnitId: 'ca-app-pub-4653575622321119/4338056837',
+      size: AdSize.smartBanner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event is $event");
+      },
+    );
+
+    FirebaseAdMob.instance
+        .initialize(appId: "ca-app-pub-4653575622321119~7316763338");
+
+    myBanner
+      ..load()
+      ..show(
+        anchorType: AnchorType.bottom,
+      );
+  }
+
   var _scaffoldkey = GlobalKey<ScaffoldState>();
   List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
     const StaggeredTile.count(2, 0.5),

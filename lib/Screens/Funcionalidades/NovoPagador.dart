@@ -1,3 +1,4 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tbp_app/Class/Person.dart';
@@ -5,6 +6,7 @@ import 'package:tbp_app/Screens/Home/index.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tbp_app/Screens/Login/index.dart';
 
 class NovoPagador extends StatefulWidget {
   @override
@@ -12,6 +14,71 @@ class NovoPagador extends StatefulWidget {
 }
 
 class _NovoPagadorState extends State<NovoPagador> {
+  InterstitialAd _interstitialAd;
+
+  bool _isInterstitialAdReady;
+  void _loadInterstitialAd() {
+    _interstitialAd.load();
+  }
+
+  void _onInterstitialAdEvent(MobileAdEvent event) {
+    switch (event) {
+      case MobileAdEvent.loaded:
+        _isInterstitialAdReady = true;
+        break;
+      case MobileAdEvent.failedToLoad:
+        _isInterstitialAdReady = false;
+        print('Failed to load an interstitial ad');
+        break;
+      case MobileAdEvent.closed:
+        // _moveToHome();
+        break;
+      default:
+    }
+  }
+
+  @override
+  void initState() {
+    MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+      testDevices: testDevice != null ? <String>[testDevice] : null,
+      keywords: <String>['foo', 'bar'],
+      contentUrl: 'http://foo.com/bar.html',
+      childDirected: true,
+      nonPersonalizedAds: true,
+    );
+
+    BannerAd myBanner = BannerAd(
+      // adUnitId: BannerAd.testAdUnitId,
+      adUnitId: 'ca-app-pub-4653575622321119/4338056837',
+      size: AdSize.smartBanner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event is $event");
+      },
+    );
+
+    FirebaseAdMob.instance
+        .initialize(appId: "ca-app-pub-4653575622321119~7316763338");
+
+    myBanner
+      ..load()
+      ..show(
+        anchorType: AnchorType.bottom,
+      );
+
+    _isInterstitialAdReady = false;
+
+    _interstitialAd = InterstitialAd(
+      adUnitId: "ca-app-pub-4653575622321119/4881524882",
+      listener: _onInterstitialAdEvent,
+      targetingInfo: targetingInfo,
+    );
+
+    if (!_isInterstitialAdReady) {
+      _loadInterstitialAd();
+    }
+  }
+
   var _scaffoldkey = GlobalKey<ScaffoldState>();
 
   TextEditingController name1 = new TextEditingController();
@@ -123,41 +190,42 @@ class _NovoPagadorState extends State<NovoPagador> {
                 SizedBox(
                   height: 10,
                 ),
-                new GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _tipoIngresso = 1;
-                    });
-                  },
-                  child: new Container(
-                    height: 75.0,
-                    alignment: FractionalOffset.center,
-                    decoration: new BoxDecoration(
-                      color: _tipoIngresso == 1 ? Colors.black : Colors.black87,
-                      borderRadius:
-                          new BorderRadius.all(const Radius.circular(30.0)),
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        new Tab(
-                          icon: new Image.asset(
-                            "assets/icons/megafone.png",
-                            width: 35,
-                          ),
-                          child: Text(
-                            'PRÉ VENDA',
-                            style: new TextStyle(
-                              fontFamily: GoogleFonts.lato().fontFamily,
-                              color: Colors.white,
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+                // new GestureDetector(
+                //   onTap: () {
+                //     setState(() {
+                //       _tipoIngresso = 2;
+                //     });
+                //   },
+                //   child:
+                new Container(
+                  height: 75.0,
+                  alignment: FractionalOffset.center,
+                  decoration: new BoxDecoration(
+                    color: _tipoIngresso == 1 ? Colors.grey : Colors.grey,
+                    borderRadius:
+                        new BorderRadius.all(const Radius.circular(30.0)),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      new Tab(
+                        icon: new Image.asset(
+                          "assets/icons/megafone.png",
+                          width: 35,
+                        ),
+                        child: Text(
+                          'PRÉ VENDA',
+                          style: new TextStyle(
+                            fontFamily: GoogleFonts.lato().fontFamily,
+                            color: Colors.white,
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
+                // ),
                 SizedBox(
                   height: 10,
                 ),
@@ -406,5 +474,15 @@ class _NovoPagadorState extends State<NovoPagador> {
             .catchError((error) => print("Failed to add user: $error"));
       });
     });
+
+    if (_isInterstitialAdReady) {
+      _interstitialAd.show();
+    }
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 }
