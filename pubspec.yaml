@@ -3,7 +3,7 @@ description: Aplicativo para administração da melhor festa americana do Espiri
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+7
+version: 1.0.0+10
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -47,6 +47,7 @@ flutter:
       - assets/video_login2.mp4
       - assets/footer.jpg
       - assets/logotipo.png
+      - assets/backIngresso.jpg
 
       - assets/icons/megafone.png
       - assets/icons/ingresso.png

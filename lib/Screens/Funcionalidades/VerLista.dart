@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:tbp_app/Class/Person.dart';
+import 'package:tbp_app/Components/CardIngresso.dart';
 import 'package:tbp_app/Screens/Home/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,7 +38,7 @@ class _VerListaState extends State<VerLista> {
     const _CardDash(Colors.red, Icons.person, "Lista", "gabe.red"),
     const _CardDash(Colors.green, Icons.person, "Lista", "Flay"),
     const _CardDash(Colors.orange, Icons.person, "Lista", "bxtrz_honorato"),
-    const _CardDash(Colors.yellow, Icons.person, "Lista", "Mary.Janne"),
+    // const _CardDash(Colors.yellow, Icons.person, "Lista", "Mary.Janne"),
     const _CardDash(Colors.purple, Icons.person, "Lista", "Dhaay"),
     const _CardDash(Colors.black, Icons.person, "Lista", "Todos"),
   ];
@@ -73,7 +74,7 @@ class _VerListaState extends State<VerLista> {
             drawer: AdministrativeUvit(),
             key: _scaffoldkey,
             body: new Padding(
-                padding: const EdgeInsets.only(top: 12.0),
+                padding: const EdgeInsets.only(top: 2.0),
                 child: new StaggeredGridView.count(
                   crossAxisCount: 2,
                   staggeredTiles: _staggeredTiles,
@@ -91,7 +92,7 @@ class ListaInfo {
   ListaInfo(this.precoTotal, this.length, this.lista, this.login);
   final double precoTotal;
   final int length;
-  final List<TableRow> lista;
+  final List<CardIngresso> lista;
   final String login;
 }
 
@@ -105,6 +106,7 @@ class _CardDash extends StatelessWidget {
 
   Future<void> _goLista(context) async {
     var lista = new List<TableRow>();
+    var lista2 = new List<CardIngresso>();
 
     FirebaseFirestore firestore;
     await Firebase.initializeApp();
@@ -126,29 +128,37 @@ class _CardDash extends StatelessWidget {
                 ? 15
                 : (doc['TipoIngresso'] == 2 ? 30 : 20);
             count += 1;
-            lista.add(TableRow(children: [
-              TableCell(child: Center(child: Text(doc['Nome']))),
-              TableCell(
-                child: Center(
-                    child: Text(doc['Cpf'].toString().length > 10
-                        ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
-                        : doc['Cpf'])),
-              ),
-              TableCell(
-                  child: Center(
-                      child:
-                          Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
-              TableCell(
-                  child: Center(
-                      child: Text((doc['TipoIngresso'] == 3
-                          ? "Combo"
-                          : (doc['TipoIngresso'] == 2
-                              ? "Normal"
-                              : "Pré-Venda"))))),
-            ]));
+
+            lista2.add(CardIngresso(
+              NomeCompleto: doc['Nome'],
+              Cpf: doc['Cpf'].toString().length > 10
+                  ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
+                  : doc['Cpf'],
+              Sexo: doc['Sexo'] == 1 ? "Feminino" : "Masculino",
+              TipoIngresso: doc['TipoIngresso'],
+            ));
+
+            // lista.add(TableRow(children: [
+            //   TableCell(child: Center(child: Text(doc['Nome']))),
+            //   TableCell(
+            //     child: Center(
+            //         child: Text(''),
+            //   ),
+            //   TableCell(
+            //       child: Center(
+            //           child:
+            //               Text('')),
+            //   TableCell(
+            //       child: Center(
+            //           child: Text((doc['TipoIngresso'] == 3
+            //               ? "Combo"
+            //               : (doc['TipoIngresso'] == 2
+            //                   ? "Normal"
+            //                   : "Pré-Venda"))))),
+            // ]));
           }),
           Navigator.pushNamed(context, "/" + this.title,
-              arguments: new ListaInfo(preco, count, lista, _login)),
+              arguments: new ListaInfo(preco, count, lista2, _login)),
         });
   }
 

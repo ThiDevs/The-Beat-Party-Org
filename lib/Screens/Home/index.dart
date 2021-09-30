@@ -204,7 +204,7 @@ class _CardDash extends StatelessWidget {
                       : admin
                           ? title
                           : "Lista"),
-              arguments: new ListaInfo(preco, count, lista, login)),
+              arguments: new ListaInfo(preco, count, null, login)),
         });
   }
 

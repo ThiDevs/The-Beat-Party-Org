@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tbp_app/Screens/Funcionalidades/Lista2.0.dart';
 import 'package:tbp_app/Screens/Funcionalidades/NovoPagador.dart';
 import 'package:tbp_app/Screens/Funcionalidades/VerLista.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
@@ -40,7 +41,7 @@ class Routes {
 
           case '/Lista':
             return new MyCustomRoute(
-              builder: (_) => new Lista(args: settings.arguments),
+              builder: (_) => new Lista2(args: settings.arguments),
               settings: settings,
             );
           default:

@@ -105,7 +105,7 @@ class _ListaState extends State<Lista> {
                         TableCell(child: Center(child: Text(''))),
                         TableCell(child: Center(child: Text(''))),
                       ]),
-                      for (var item in widget.args.lista) item
+                      // for (var item in widget.args.lista) item
                     ])))
       ],
     );
