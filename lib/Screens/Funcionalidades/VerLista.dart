@@ -123,39 +123,26 @@ class _CardDash extends StatelessWidget {
     var preco = 0.00;
     var count = 0;
     col.get().then((QuerySnapshot querySnapshot) => {
-          querySnapshot.docs.forEach((doc) {
+          querySnapshot.docs.forEach((doc) async {
             preco += doc['TipoIngresso'] == 3
                 ? 15
                 : (doc['TipoIngresso'] == 2 ? 30 : 20);
             count += 1;
 
+            if (doc["Nome"] == "Jaiane Meireles Evangelista ") {
+              await firestore.collection("User").doc(doc.id).delete();
+            }
             lista2.add(CardIngresso(
+              Id: doc.id,
+              entry: doc["entry"],
               NomeCompleto: doc['Nome'],
               Cpf: doc['Cpf'].toString().length > 10
                   ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
                   : doc['Cpf'],
               Sexo: doc['Sexo'] == 1 ? "Feminino" : "Masculino",
               TipoIngresso: doc['TipoIngresso'],
+              Title: this.title,
             ));
-
-            // lista.add(TableRow(children: [
-            //   TableCell(child: Center(child: Text(doc['Nome']))),
-            //   TableCell(
-            //     child: Center(
-            //         child: Text(''),
-            //   ),
-            //   TableCell(
-            //       child: Center(
-            //           child:
-            //               Text('')),
-            //   TableCell(
-            //       child: Center(
-            //           child: Text((doc['TipoIngresso'] == 3
-            //               ? "Combo"
-            //               : (doc['TipoIngresso'] == 2
-            //                   ? "Normal"
-            //                   : "Pré-Venda"))))),
-            // ]));
           }),
           Navigator.pushNamed(context, "/" + this.title,
               arguments: new ListaInfo(preco, count, lista2, _login)),

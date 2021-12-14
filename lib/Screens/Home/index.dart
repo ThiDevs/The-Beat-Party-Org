@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tbp_app/Components/CardIngresso.dart';
 import 'package:tbp_app/Screens/Funcionalidades/VerLista.dart';
 import 'package:tbp_app/Screens/Login/index.dart';
 
@@ -49,23 +50,23 @@ class _AdministrativeUvitState extends State<AdministrativeUvit> {
     const StaggeredTile.count(2, 0.5),
   ];
   List<Widget> _tiles = const <Widget>[
-    _CardDash(Colors.green, Icons.attach_money, "Cadastrar"),
+    _CardDash(Colors.green, Icons.attach_money, "Cadastrar", ''),
   ];
   Future<void> _getList() async {
     final prefs = await SharedPreferences.getInstance();
     final login = prefs.getString('login') ?? "";
     var admins = ['jhoni.blu', 'gabe.red', 'jubsricardo', 'a'];
     _tiles = <Widget>[
-      _CardDash(Colors.green, Icons.attach_money, "Cadastrar"),
+      _CardDash(Colors.green, Icons.attach_money, "Cadastrar", login),
     ];
 
     setState(() {
       if (!admins.contains(login)) {
-        _tiles.add(
-            _CardDash(Colors.lightBlue, Icons.remove_red_eye_outlined, login));
-      } else {
         _tiles.add(_CardDash(
-            Colors.lightBlue, Icons.remove_red_eye_outlined, "Ver Lista"));
+            Colors.lightBlue, Icons.remove_red_eye_outlined, 'Lista', login));
+      } else {
+        _tiles.add(_CardDash(Colors.lightBlue, Icons.remove_red_eye_outlined,
+            "Ver Lista", login));
       }
     });
   }
@@ -142,31 +143,31 @@ class _AdministrativeUvitState extends State<AdministrativeUvit> {
 }
 
 class _CardDash extends StatelessWidget {
-  const _CardDash(this.backgroundColor, this.iconData, this.title);
+  const _CardDash(this.backgroundColor, this.iconData, this.title, this._login);
 
   final Color backgroundColor;
   final IconData iconData;
   final String title;
+  final String _login;
 
   Future<void> _goLista(context) async {
-    List<TableRow> lista = [];
+    var lista = new List<TableRow>();
+    var lista2 = new List<CardIngresso>();
+
     FirebaseFirestore firestore;
     await Firebase.initializeApp();
     firestore = FirebaseFirestore.instance;
-    final prefs = await SharedPreferences.getInstance();
-    final login = prefs.getString('login') ?? "";
-    var admins = ['jhoni.blu', 'gabe.red', 'jubsricardo', 'a'];
-    var admin = false;
-    if (admins.contains(login)) admin = true;
     Query col;
-    if (login.contains("Todos"))
+    if (_login.contains("Todos"))
       col = firestore.collection("User").orderBy("Nome");
     else
       col = firestore
           .collection("User")
-          .where('Login', isEqualTo: login.toLowerCase())
+          .where('Login', isEqualTo: _login.toLowerCase())
           .orderBy("Nome");
-
+    var admins = ['jhoni.blu', 'gabe.red', 'jubsricardo', 'a'];
+    var admin = false;
+    if (admins.contains(_login)) admin = true;
     var preco = 0.00;
     var count = 0;
     col.get().then((QuerySnapshot querySnapshot) => {
@@ -175,26 +176,24 @@ class _CardDash extends StatelessWidget {
                 ? 15
                 : (doc['TipoIngresso'] == 2 ? 30 : 20);
             count += 1;
-            lista.add(TableRow(children: [
-              TableCell(child: Center(child: Text(doc['Nome']))),
-              TableCell(
-                child: Center(
-                    child: Text(doc['Cpf'].toString().length > 10
-                        ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
-                        : doc['Cpf'])),
-              ),
-              TableCell(
-                  child: Center(
-                      child:
-                          Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
-              TableCell(
-                  child: Center(
-                      child: Text((doc['TipoIngresso'] == 3
-                          ? "Combo"
-                          : (doc['TipoIngresso'] == 2
-                              ? "Normal"
-                              : "Pré-Venda"))))),
-            ]));
+
+            var entry = false;
+            try {
+              entry = doc["entry"];
+            } catch (Exception) {
+              entry = false;
+            }
+
+            lista2.add(CardIngresso(
+                Id: doc.id,
+                entry: false,
+                NomeCompleto: doc['Nome'],
+                Cpf: doc['Cpf'].toString().length > 10
+                    ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
+                    : doc['Cpf'],
+                Sexo: doc['Sexo'] == 1 ? "Feminino" : "Masculino",
+                TipoIngresso: doc['TipoIngresso'],
+                Title: this.title));
           }),
           Navigator.pushNamed(
               context,
@@ -204,7 +203,7 @@ class _CardDash extends StatelessWidget {
                       : admin
                           ? title
                           : "Lista"),
-              arguments: new ListaInfo(preco, count, null, login)),
+              arguments: new ListaInfo(preco, count, lista2, _login)),
         });
   }
 
@@ -215,13 +214,12 @@ class _CardDash extends StatelessWidget {
       child: new InkWell(
         onTap: () {
           _goLista(context);
-          // Navigator.pushNamed(context, "/" + this.title);
         },
         child: Stack(
           children: <Widget>[
             new Container(
               child: new Padding(
-                padding: const EdgeInsets.all(2.0),
+                padding: const EdgeInsets.all(25.0),
                 child: new Icon(
                   iconData,
                   color: Colors.white,
@@ -231,7 +229,9 @@ class _CardDash extends StatelessWidget {
             new Center(
                 child: new Container(
               child: new Text(
+                // this._login,
                 this.title,
+
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               ),
@@ -242,3 +242,105 @@ class _CardDash extends StatelessWidget {
     );
   }
 }
+
+// class _CardDash extends StatelessWidget {
+//   const _CardDash(this.backgroundColor, this.iconData, this.title);
+
+//   final Color backgroundColor;
+//   final IconData iconData;
+//   final String title;
+
+//   Future<void> _goLista(context) async {
+//     List<TableRow> lista = [];
+//     FirebaseFirestore firestore;
+//     await Firebase.initializeApp();
+//     firestore = FirebaseFirestore.instance;
+//     final prefs = await SharedPreferences.getInstance();
+//     final login = prefs.getString('login') ?? "";
+//     var admins = ['jhoni.blu', 'gabe.red', 'jubsricardo', 'a'];
+//     var admin = false;
+//     if (admins.contains(login)) admin = true;
+//     Query col;
+//     if (login.contains("Todos"))
+//       col = firestore.collection("User").orderBy("Nome");
+//     else
+//       col = firestore
+//           .collection("User")
+//           .where('Login', isEqualTo: login.toLowerCase())
+//           .orderBy("Nome");
+
+//     var preco = 0.00;
+//     var count = 0;
+//     col.get().then((QuerySnapshot querySnapshot) => {
+//           querySnapshot.docs.forEach((doc) {
+//             preco += doc['TipoIngresso'] == 3
+//                 ? 15
+//                 : (doc['TipoIngresso'] == 2 ? 30 : 20);
+//             count += 1;
+//             lista.add(TableRow(children: [
+//               TableCell(child: Center(child: Text(doc['Nome']))),
+//               TableCell(
+//                 child: Center(
+//                     child: Text(doc['Cpf'].toString().length > 10
+//                         ? '${doc['Cpf'].toString().substring(0, 3)}.${doc['Cpf'].substring(3, 6)}.${doc['Cpf'].substring(6, 9)}-${doc['Cpf'].substring(9, 11)}'
+//                         : doc['Cpf'])),
+//               ),
+//               TableCell(
+//                   child: Center(
+//                       child:
+//                           Text(doc['Sexo'] == 1 ? "Feminino" : "Masculino"))),
+//               TableCell(
+//                   child: Center(
+//                       child: Text((doc['TipoIngresso'] == 3
+//                           ? "Combo"
+//                           : (doc['TipoIngresso'] == 2
+//                               ? "Normal"
+//                               : "Pré-Venda"))))),
+//             ]));
+//           }),
+//           Navigator.pushNamed(
+//               context,
+//               "/" +
+//                   (title == "Cadastrar"
+//                       ? "Cadastrar"
+//                       : admin
+//                           ? title
+//                           : "Lista"),
+//               arguments: new ListaInfo(preco, count, null, login)),
+//         });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Card(
+//       color: backgroundColor,
+//       child: new InkWell(
+//         onTap: () {
+//           _goLista(context);
+//           // Navigator.pushNamed(context, "/" + this.title);
+//         },
+//         child: Stack(
+//           children: <Widget>[
+//             new Container(
+//               child: new Padding(
+//                 padding: const EdgeInsets.all(2.0),
+//                 child: new Icon(
+//                   iconData,
+//                   color: Colors.white,
+//                 ),
+//               ),
+//             ),
+//             new Center(
+//                 child: new Container(
+//               child: new Text(
+//                 this.title,
+//                 style:
+//                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+//               ),
+//             )),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

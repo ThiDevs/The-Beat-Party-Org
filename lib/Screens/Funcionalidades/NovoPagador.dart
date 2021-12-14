@@ -452,6 +452,7 @@ class _NovoPagadorState extends State<NovoPagador> {
               'Sexo': val.sexo,
               'TipoIngresso': val.tipoIngresso,
               'Login': login,
+              'entry': false
             })
             .then((value) => showDialog(
                   context: context,

@@ -16,7 +16,9 @@ class Lista2 extends StatefulWidget {
 
 class _Lista2State extends State<Lista2> {
   var _scaffoldkey = GlobalKey<ScaffoldState>();
+  List<CardIngresso> _searchResult = [];
 
+  TextEditingController controller = new TextEditingController();
   Future<void> getLogin() async {
     final prefs = await SharedPreferences.getInstance();
     final login = prefs.getString('login') ?? "";
@@ -43,7 +45,8 @@ class _Lista2State extends State<Lista2> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.black,
-              title: Text("${widget.args.login}"),
+              title: Text(
+                  "${widget.args.login}: ${widget.args.length} Ingressos ${(show ? ", " + widget.args.precoTotal.toString() + " Reais" : "")}"),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.home),
@@ -61,15 +64,67 @@ class _Lista2State extends State<Lista2> {
             key: _scaffoldkey,
             body: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  itemCount: widget.args.lista.length,
-                  itemBuilder: (context, index) {
-                    return widget.args.lista[index];
-                  },
-                )
+                child: Column(children: [
+                  new Container(
+                    color: Theme.of(context).primaryColor,
+                    child: new Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new Card(
+                        child: new ListTile(
+                          leading: new Icon(Icons.search),
+                          title: new TextField(
+                            controller: controller,
+                            decoration: new InputDecoration(
+                                hintText: 'Procurar', border: InputBorder.none),
+                            onChanged: onSearchTextChanged,
+                          ),
+                          trailing: new IconButton(
+                            icon: new Icon(Icons.cancel),
+                            onPressed: () {
+                              controller.clear();
+                              onSearchTextChanged('');
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  new Expanded(
+                      child: _searchResult.length != 0 ||
+                              controller.text.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: _searchResult.length,
+                              itemBuilder: (context, index) {
+                                return _searchResult[index];
+                              },
+                            )
+                          : ListView.builder(
+                              itemCount: widget.args.lista.length,
+                              itemBuilder: (context, index) {
+                                return widget.args.lista[index];
+                              },
+                            ))
+                ])
+
                 // [for (var item in widget.args.lista) item],
                 ))
       ],
     );
+  }
+
+  onSearchTextChanged(String text) async {
+    _searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+    widget.args.lista.forEach((userDetail) {
+      if (userDetail.NomeCompleto.toLowerCase().contains(text.toLowerCase()) ||
+          userDetail.NomeCompleto == "" ||
+          userDetail.Cpf.replaceAll(".", "").contains(text) ||
+          userDetail.Cpf.contains(text)) _searchResult.add(userDetail);
+    });
+
+    setState(() {});
   }
 }
